@@ -1,19 +1,27 @@
-from app.database import mongo
-from bson import ObjectId
 from datetime import datetime
+from bson import ObjectId
+from app.database import mongo
 
-def create_subscription(user_id, subscription_data):
-    subscription_data['user_id'] = ObjectId(user_id)
-    subscription_data['start_date'] = datetime.utcnow()
-    subscription_data['end_date'] = subscription_data.get('end_date')
-    subscription_data['is_active'] = True
-    return mongo.db.subscriptions.insert_one(subscription_data)
+def create_subscription(subscription_data):
+    subscription_data['created_at'] = datetime.utcnow()
+    subscription_data['updated_at'] = datetime.utcnow()
+    return mongo.db.subscriptions.insert_one(subscription_data).inserted_id
 
-def get_subscription_by_user(user_id):
-    return mongo.db.subscriptions.find_one({"user_id": ObjectId(user_id)})
+def get_subscription_by_id(subscription_id):
+    subscription = mongo.db.subscriptions.find_one({"_id": ObjectId(subscription_id)})
+    if subscription:
+        subscription["_id"] = str(subscription["_id"])  # Convert ObjectId to string
+    return subscription
 
-def cancel_subscription(user_id):
-    return mongo.db.subscriptions.update_one(
-        {"user_id": ObjectId(user_id)},
-        {"$set": {"is_active": False, "end_date": datetime.utcnow()}}
-    )
+def update_subscription(subscription_id, update_data):
+    update_data['updated_at'] = datetime.utcnow()
+    mongo.db.subscriptions.update_one({"_id": ObjectId(subscription_id)}, {"$set": update_data})
+
+def delete_subscription(subscription_id):
+    mongo.db.subscriptions.delete_one({"_id": ObjectId(subscription_id)})
+
+def list_subscriptions():
+    subscriptions = list(mongo.db.subscriptions.find())
+    for subscription in subscriptions:
+        subscription["_id"] = str(subscription["_id"])  # Convert ObjectId to string
+    return subscriptions
