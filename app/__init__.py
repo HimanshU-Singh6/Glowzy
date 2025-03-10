@@ -3,6 +3,7 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
 from .database import init_db , check_connection
+from .routes import register_routes
 import os
 
 jwt = JWTManager()
@@ -17,6 +18,8 @@ def create_app():
     init_db(app)
     jwt.init_app(app)
     CORS(app)
+
+    register_routes(app)
 
     @app.route('/')
     def hello_world():
