@@ -6,6 +6,8 @@ from app.models.subscription_model import (
     list_subscriptions as list_subscriptions_db
 )
 
+# TODO: update subscription status in user collection
+
 def create_subscription_service(subscription_data):
     return create_subscription_db(subscription_data)
 
