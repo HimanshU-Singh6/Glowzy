@@ -1,10 +1,11 @@
 from datetime import datetime
 from bson import ObjectId
 from app.database import mongo
+from datetime import timezone
 
 def create_report(report_data):
-    report_data['created_at'] = datetime.utcnow()
-    report_data['updated_at'] = datetime.utcnow()
+    report_data['created_at'] = datetime.now(timezone.utc)
+    report_data['updated_at'] = datetime.now(timezone.utc)
     return mongo.db.reports.insert_one(report_data).inserted_id
 
 def get_report_by_id(report_id):
@@ -14,7 +15,7 @@ def get_report_by_id(report_id):
     return report
 
 def update_report(report_id, update_data):
-    update_data['updated_at'] = datetime.utcnow()
+    update_data['updated_at'] = datetime.now(timezone.utc)
     mongo.db.reports.update_one({"_id": ObjectId(report_id)}, {"$set": update_data})
 
 def delete_report(report_id):

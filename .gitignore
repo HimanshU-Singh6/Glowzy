@@ -2,12 +2,15 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=flask
 
 Calcium Market Data.json
+OAuth Client ID - My First Project.json
 ### Flask ###
 instance/*
 !instance/.gitignore
 .webassets-cache
 .env
 .gitignore
+
+tests/
 
 ### Flask.Python Stack ###
 # Byte-compiled / optimized / DLL files

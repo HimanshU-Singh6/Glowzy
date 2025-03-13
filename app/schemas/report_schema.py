@@ -7,6 +7,6 @@ class ReportSchema(Schema):
     beauty_assessment = fields.Dict(required=False)
     images = fields.List(fields.Str(), required=False)
     version = fields.Int(required=False)
-    status = fields.Str(validate=validate.OneOf(["Draft", "Published", "Archived"]), default="Draft")
+    status = fields.Str(validate=validate.OneOf(["Draft", "Published", "Archived"]), dump_default="Draft")
     created_at = fields.DateTime(required=False)
     updated_at = fields.DateTime(required=False)

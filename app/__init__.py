@@ -15,11 +15,21 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object('app.config.Config')
 
+
+
+
+
     init_db(app)
     jwt.init_app(app)
     CORS(app)
 
     register_routes(app)
+
+    # for listing all routes
+    # print("Registered routes:")
+    # for rule in app.url_map.iter_rules():
+    #     print(f"{rule.endpoint}: {rule}")
+
 
     @app.route('/')
     def hello_world():
