@@ -3,6 +3,7 @@ from flask import request, jsonify
 from jwt import ExpiredSignatureError
 from app.utils.jwt_utils import decode_token
 
+# --- TOKEN REQUIRED DECORATOR ---
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -31,6 +32,8 @@ def token_required(f):
 
     return decorated
 
+
+# --- ADMIN REQUIRED DECORATOR ---
 def admin_required(f):
     @wraps(f)
     @token_required
@@ -40,3 +43,28 @@ def admin_required(f):
         return f(*args, **kwargs)
 
     return decorated
+
+
+# --- PREMIUM REQUIRED DECORATOR ---
+def premium_required(f):
+    @wraps(f)
+    @token_required
+    def decorated(*args, **kwargs):
+        if request.user['role'] != 'premium':
+            return jsonify({'error': 'Premium access required'}), 403
+        return f(*args, **kwargs)
+
+    return decorated
+
+
+# --- GENERALIZED ROLES REQUIRED DECORATOR ---
+def roles_required(roles):
+    def decorator(f):
+        @wraps(f)
+        @token_required
+        def decorated(*args, **kwargs):
+            if request.user['role'] not in roles:
+                return jsonify({'error': f'Access restricted to roles: {roles}'}), 403
+            return f(*args, **kwargs)
+        return decorated
+    return decorator

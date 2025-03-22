@@ -7,7 +7,8 @@ def generate_access_token(user_id, role):
     payload = {
         'user_id': str(user_id),
         'role': role,
-        'exp': datetime.now(timezone.utc) + timedelta(minutes=15)  # Access token expires in 15 mins
+        'is_admin': role == 'admin',
+        'exp': datetime.now(timezone.utc) + timedelta(minutes=15)
     }
     token = jwt.encode(payload, current_app.config['JWT_SECRET_KEY'], algorithm='HS256')
     return token

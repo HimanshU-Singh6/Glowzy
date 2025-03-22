@@ -23,6 +23,7 @@ def create_user_route():
 
     try:
         user_id = create_user_service(user_data)
+        print("user_id", user_id)
         return jsonify({"success": True, "data": {"id": str(user_id)}, "message": "User created successfully"}), 201
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500

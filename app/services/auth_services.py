@@ -21,7 +21,6 @@ from app.utils.jwt_utils import generate_access_token, generate_refresh_token, d
 # )
 
 def register_user_service(data):
-    # TODO: we can add name registration and profile pic later
     email = data.get('email')
     password = data.get('password')
 
@@ -41,12 +40,17 @@ def register_user_service(data):
         "created_at": datetime.now(timezone.utc)
     }
 
-    user = create_user_service(user_data)
+    # Create the user
+    result = create_user_service(user_data)
 
-    # Commented out email verification for now
-    # send_verification_email(user)
+    # Get the inserted_id from the InsertOneResult
+    user_id = str(result.inserted_id)
 
-    return {"message": "User registered successfully.", "status": 201}
+    return {
+        "message": "User registered successfully.",
+        "user_id": user_id,  # return the ID here
+        "status": 201
+    } 
 
 def login_user_service(data):
     email = data.get('email')

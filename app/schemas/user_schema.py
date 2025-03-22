@@ -1,7 +1,7 @@
 from marshmallow import Schema, fields, validate
 
 class UserRegistrationSchema(Schema):
-    role = fields.Str(validate=validate.OneOf(["user", "admin"]), dump_default="user")
+    role = fields.Str(validate=validate.OneOf(["user", "admin","premium"]), dump_default="user")
     name = fields.Str(required=True)
     email = fields.Email(required=True)
     phone_number = fields.Str(required=False)
@@ -12,7 +12,7 @@ class UserRegistrationSchema(Schema):
 
 class UserSchema(Schema):
     id = fields.Str(attribute="_id")  # Serialize ObjectId as string
-    role = fields.Str(validate=validate.OneOf(["user", "admin"]), dump_default="user")
+    role = fields.Str(validate=validate.OneOf(["user", "admin","premium"]), dump_default="user")
     name = fields.Str(required=True)
     email = fields.Email(required=True)
     phone_number = fields.Str(required=False)
